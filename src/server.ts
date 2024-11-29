@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import { setupSwagger } from './configs/swagger.config';
 import cors from 'cors';
 import morgan from 'morgan'
+import { rateLimit } from 'express-rate-limit'
 
 // Routes
 import userRouter from './routers/user.router';
@@ -27,6 +28,16 @@ mongoose.connect(process.env.MONGO_URI as string)
 // Swagger
 setupSwagger(app);
 
+// rate-limitting
+const limiter = rateLimit({
+	windowMs: 1 * 60 * 1000, // 1 min window
+	limit: 1000, // limitting upto 10k requests
+	standardHeaders: 'draft-7',
+	legacyHeaders: false,
+})
+app.use(limiter)
+
+// Health Endpoints
 app.get('/api/ping', (req, res) => {
     res.send({ response: 'pong'});
 });
