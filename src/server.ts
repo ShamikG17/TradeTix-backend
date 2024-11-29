@@ -42,7 +42,8 @@ app.use(limiter)
 const slower = slowDown({
 	windowMs: 5 * 60 * 1000,
 	delayAfter: 5500,
-	delayMs: (hits) => hits * 100, // Add 100 ms of delay to every request after the 5th one.
+	// delayMs: (hits) => hits * 100,
+	delayMs: (hits) => 500,
 })
 app.use(slower)
 
