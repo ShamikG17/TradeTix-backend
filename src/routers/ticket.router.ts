@@ -1,7 +1,10 @@
 import express from "express";
 import { Request, Response } from "express";
 import { updateTicket, deleteTicket } from "../controllers/ticket.controller";
-import { createListing, getListingForTicket } from "../controllers/listing.controller";
+import {
+  createListing,
+  getListingForTicket,
+} from "../controllers/listing.controller";
 import auth, { CustomRequest } from "../middlewares/auth.middleware";
 import {
   createErrorResponse,
@@ -194,6 +197,13 @@ router.post(
  *         schema:
  *           type: string
  *         description: Ticket ID
+ *       - in: query
+ *         name: populate
+ *         schema:
+ *           type: string
+ *           description: Fields to populate
+ *           example: createdBy,updatedBy
+ *         description: Fields to populate
  *     responses:
  *       200:
  *         description: Ticket fetched Successfully
@@ -204,17 +214,23 @@ router.post(
  *       500:
  *         description: Internal Server Error
  */
-router.get("/:id/listings", auth(), async (req: CustomRequest, res: Response) => {
-  try {
-    const id: string = req.params.id;
-    const listings = await getListingForTicket(id);
-    return res.status(200).send(createResponse("LISTINGS_FETCHED", listings));
-  } catch (error: any) {
-    return res
-      .status(error.status)
-      .send(createErrorResponse(error.message, error.error));
+router.get(
+  "/:id/listings",
+  auth(),
+  async (req: CustomRequest, res: Response) => {
+    try {
+      const id: string = req.params.id;
+      const populateFields = req.query.populate
+        ? (req.query.populate as string).split(",")
+        : [];
+      const listings = await getListingForTicket(id, populateFields);
+      return res.status(200).send(createResponse("LISTINGS_FETCHED", listings));
+    } catch (error: any) {
+      return res
+        .status(error.status)
+        .send(createErrorResponse(error.message, error.error));
+    }
   }
-});
-
+);
 
 export default router;
