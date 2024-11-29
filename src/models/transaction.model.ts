@@ -1,9 +1,10 @@
 import { Document, Schema, Model, model, HydratedDocument } from "mongoose";
 import { IUser } from "./user.model";
+import { ITicket } from "./ticket.model";
 
 export interface ITransaction extends Document {
-  ticketID: Schema.Types.ObjectId;
-  sellerID: Schema.Types.ObjectId;
+  ticketID: ITicket;
+  sellerID: IUser;
   salePrice: number;
   createdBy: IUser;
   createdAt: Date;

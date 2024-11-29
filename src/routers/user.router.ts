@@ -41,6 +41,8 @@ const router = express.Router();
  *                 type: string
  *               password:
  *                 type: string
+ *               role:
+ *                 type: string
  *     responses:
  *       201:
  *         description: User registered successfully
@@ -55,7 +57,7 @@ router.post("/", async (req: Request, res: Response) => {
     return res.status(201).send(createResponse("USER_CREATED", createdUser));
   } catch (error: any) {
     return res
-      .status(error.status)
+      .status(500)
       .send(createErrorResponse(error.message, error.error));
   }
 });
@@ -224,7 +226,7 @@ router.delete("/:id", auth(), async (req: CustomRequest, res: Response) => {
  *         application/json:
  *           schema:
  *             properties:
- *               userna:
+ *               username:
  *                 type: string
  *               password:
  *                 type: string
@@ -261,10 +263,6 @@ router.post('/login', async (req: Request, res: Response) => {
  *     responses:
  *       200:
  *         description: User logged out successfully
- *       400:
- *         description: Invalid Request
- *       401:
- *         description: User Unauthorized
  *       500:
  *         description: Internal Server Error
  */

@@ -1,16 +1,17 @@
-import { FilterQuery } from "mongoose";
+import { FilterQuery, ObjectId } from "mongoose";
 import Transaction, { ITransaction } from "../models/transaction.model";
 import { IUser } from "../models/user.model";
 import { HttpError } from "../utils/customExceptionHandler.util";
+import Listing, { IListing } from "../models/listing.model";
 
 export const createTransaction = async (
-  listingID: string,
-  transaction: Partial<ITransaction>,
+  listing: Partial<IListing>,
   user: Partial<IUser>
 ) => {
   const newTransaction = new Transaction({
-    listingID,
-    salePrice: transaction.salePrice,
+    ticketID: listing.ticketID,
+    sellerID: listing.ticketID!.ownerID,
+    salePrice: listing.price,
     createdBy: user,
     updatedBy: user,
   });
@@ -18,7 +19,12 @@ export const createTransaction = async (
   return newTransaction;
 };
 
-export const getTransactions = async (limit: number, page: number, filter: FilterQuery<ITransaction>, sort: string) => {
+export const getTransactions = async (
+  limit: number,
+  page: number,
+  filter: FilterQuery<ITransaction>,
+  sort: string
+) => {
   const query = Transaction.find()
     .limit(limit)
     .skip(limit * (page - 1))
@@ -33,4 +39,4 @@ export const getTransactionById = async (id: string) => {
     throw HttpError.notFound("Transaction", "Transaction not found");
   }
   return transaction;
-}
+};
