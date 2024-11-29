@@ -1,9 +1,10 @@
 import { Document, Schema, Model, model, HydratedDocument } from "mongoose";
 import { IUser } from "./user.model";
+import { IEvent } from "./event.model";
 
 export interface ITicket extends Document {
-  eventID: Schema.Types.ObjectId;
-  ownerID: Schema.Types.ObjectId;
+  eventID: IEvent;
+  ownerID: IUser;
   seatNumber: string;
   createdBy: IUser;
   createdAt: Date;

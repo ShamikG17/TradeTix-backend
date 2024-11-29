@@ -1,8 +1,9 @@
 import { Document, Schema, Model, model, HydratedDocument } from "mongoose";
 import { IUser } from "./user.model";
+import { ITicket } from "./ticket.model";
 
 export interface IListing extends Document {
-  ticketID: Schema.Types.ObjectId;
+  ticketID: ITicket;
   price: number;
   status: "open" | "closed";
   createdBy: IUser;

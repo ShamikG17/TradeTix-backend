@@ -2,6 +2,7 @@ import Ticket, { ITicket } from "../models/ticket.model";
 import Listing, { IListing } from "../models/listing.model";
 import User, { IUser } from "../models/user.model";
 import { HttpError } from "../utils/customExceptionHandler.util";
+import { createTransaction } from "./transaction.controller";
 
 export const createListing = async (
   listing: Partial<IListing>,
@@ -48,4 +49,21 @@ export const deleteListing = async (id: string) => {
     throw HttpError.notFound("Listing", "Listing not found");
   }
   return deletedListing;
+};
+
+export const buyTicketListing = async (id: string, user: Partial<IUser>) => {
+  const listing = await Listing.findById(id).populate("ticketID");
+  if (!listing) {
+    throw HttpError.notFound("Listing", "Listing not found");
+  }
+  if (listing.status === "closed") {
+    throw HttpError.badRequest("Listing", "Listing is already closed");
+  }
+  const newTransaction = await createTransaction(listing, user);
+  listing.status = "closed";
+  await listing.save();
+
+  await Ticket.findOneAndUpdate({ _id: listing.ticketID }, { ownerID: user });
+
+  return newTransaction;
 };
