@@ -19,8 +19,12 @@ export const createListing = async (
   return newListing;
 };
 
-export const getListingForTicket = async (ticketID: string) => {
-  const listing = await Listing.findOne({ ticketID });
+export const getListingForTicket = async (ticketID: string, populateFields: string[] = []) => {
+  let query = Listing.findOne({ ticketID });
+  populateFields.forEach((field) => {
+    query = query.populate(field);
+  });
+  const listing = await query.exec();
   if (!listing) {
     throw HttpError.notFound("Listing", "Listing not found");
   }

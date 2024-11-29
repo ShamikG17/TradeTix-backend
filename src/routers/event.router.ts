@@ -178,6 +178,24 @@ router.post(
  *           type: number
  *           description: The page number
  *           example: 1
+ *       - in: query
+ *         name: filter
+ *         schema:
+ *           type: string
+ *           description: JSON string to filter tickets
+ *           example: {"seatNumber": "A1"}
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *           description: Field to sort tickets by
+ *           example: "-createdAt"
+ *       - in: query
+ *         name: populate
+ *         schema:
+ *           type: string
+ *           description: Fields to populate
+ *           example: "ownerID"
  *     responses:
  *       200:
  *         description: Returns all tickets
@@ -196,12 +214,15 @@ router.get("/:id/tickets", auth(), async (req: CustomRequest, res: Response) => 
         ? JSON.parse(req.query.filter as string)
         : {};
       const sort = (req.query.sort as string) || "-createdAt";
+      const populateFields = req.query.populate ? (req.query.populate as string).split(",") : [];
+
       const tickets = await getTicketsForEvent(
         req.params.id as Partial<IEvent>,
         limit,
         page,
         filter,
-        sort
+        sort,
+        populateFields
       );
       return res.status(200).send(createResponse("TICKETS_FETCHED", tickets));
     } catch (error: any) {
@@ -231,18 +252,26 @@ router.get("/:id/tickets", auth(), async (req: CustomRequest, res: Response) => 
  *         name: page
  *         schema:
  *           type: number
- *  
+ *           example: 1
  *         description: Page number
  *       - in: query
  *         name: filter
  *         schema:
  *           type: string
+ *           example: {"name": "Dua Lipa India Tour"}
  *         description: JSON string to filter events
  *       - in: query
  *         name: sort
  *         schema:
  *           type: string
+ *           example: "-createdAt"
  *         description: Field to sort events by
+ *       - in: query
+ *         name: populate
+ *         schema:
+ *           type: string
+ *           description: Fields to populate
+ *           example: "ownerID"
  *     responses:
  *       200:
  *         description: Get all events
@@ -261,6 +290,8 @@ router.get("/", auth(), async (req: Request, res: Response) => {
       ? JSON.parse(req.query.filter as string)
       : {};
     const sort = (req.query.sort as string) || "-createdAt";
+    const populateFields = req.query.populate ? (req.query.populate as string).split(",") : [];
+    
     const events = await getEvents(limit, page, filter, sort);
     return res.status(200).send(createResponse("EVENTS_FETCHED", events));
   } catch (error: any) {
@@ -285,6 +316,13 @@ router.get("/", auth(), async (req: Request, res: Response) => {
  *         schema:
  *           type: string
  *         description: Event ID
+ *       - in: query
+ *         name: populate
+ *         schema:
+ *           type: string
+ *           description: Fields to populate 
+ *           example: "ownerID"
+ *         description: Fields to populate
  *     responses:
  *       200:
  *         description: Get event by ID
@@ -297,7 +335,8 @@ router.get("/", auth(), async (req: Request, res: Response) => {
  */
 router.get("/:id", auth(), async (req: Request, res: Response) => {
   try {
-    const event = await getEventById(req.params.id);
+    const populateFields = req.query.populate ? (req.query.populate as string).split(",") : [];
+    const event = await getEventById(req.params.id, populateFields);
     return res.status(200).send(createResponse("EVENT_FETCHED", event));
   } catch (error: any) {
     return res

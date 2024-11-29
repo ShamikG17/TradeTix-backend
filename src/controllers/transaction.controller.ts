@@ -23,18 +23,29 @@ export const getTransactions = async (
   limit: number,
   page: number,
   filter: FilterQuery<ITransaction>,
-  sort: string
+  sort: string,
+  populateFields: string[] = []
 ) => {
-  const query = Transaction.find()
+  let query = Transaction.find(filter)
     .limit(limit)
     .skip(limit * (page - 1))
     .sort(sort);
+  populateFields.forEach((field) => {
+    query = query.populate(field);
+  });
   const transactions = await query.exec();
   return transactions;
 };
 
-export const getTransactionById = async (id: string) => {
-  const transaction = await Transaction.findById(id);
+export const getTransactionById = async (
+  id: string,
+  populateFields: string[] = []
+) => {
+  let query = Transaction.findById(id);
+  populateFields.forEach((field) => {
+    query = query.populate(field);
+  });
+  const transaction = await query.exec();
   if (!transaction) {
     throw HttpError.notFound("Transaction", "Transaction not found");
   }
