@@ -90,6 +90,7 @@ router.put("/:id", auth(), async (req: CustomRequest, res: Response) => {
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
  *         description: Ticket ID
