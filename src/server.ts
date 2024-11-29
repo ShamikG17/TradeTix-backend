@@ -5,6 +5,7 @@ import { setupSwagger } from './configs/swagger.config';
 import cors from 'cors';
 import morgan from 'morgan'
 import { rateLimit } from 'express-rate-limit'
+import { slowDown } from 'express-slow-down'
 
 // Routes
 import userRouter from './routers/user.router';
@@ -30,12 +31,20 @@ setupSwagger(app);
 
 // rate-limitting
 const limiter = rateLimit({
-	windowMs: 1 * 60 * 1000, // 1 min window
-	limit: 1000, // limitting upto 10k requests
+	windowMs: 5 * 60 * 1000, // 5 min window
+	limit: 10000, // limitting upto 10k requests
 	standardHeaders: 'draft-7',
 	legacyHeaders: false,
 })
 app.use(limiter)
+
+// slow-down requests
+const slower = slowDown({
+	windowMs: 5 * 60 * 1000,
+	delayAfter: 5500,
+	delayMs: (hits) => hits * 100, // Add 100 ms of delay to every request after the 5th one.
+})
+app.use(slower)
 
 // Health Endpoints
 app.get('/api/ping', (req, res) => {
