@@ -12,7 +12,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://dev.tradetix.api.add2f90.kyma.ondemand.com/',
+        url: 'http://tradetix.api.add2f90.kyma.ondemand.com/',
       },
       {
         url: `http://localhost:${process.env.PORT}`,
