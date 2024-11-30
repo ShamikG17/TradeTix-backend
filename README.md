@@ -7,5 +7,5 @@
 
 # Useful Resources
 
-- [Prod Swagger UI](tradetix.api.add2f90.kyma.ondemand.com/api-docs)
+- [Prod Swagger UI](http://tradetix.api.add2f90.kyma.ondemand.com/api-docs)
 - [Project Documentation](https://bitsapibp2024.github.io/TeamB10/)
