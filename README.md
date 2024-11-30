@@ -5,17 +5,7 @@
 
 "TradeTix is a user-friendly web app where you can sell ticketsyou’re unable to utilize. Easily find a new home for your tickets or grab last-minute deals from other users."
 
-## Build and Run
+# Useful Resources
 
-clone the project and run the mongodb in container
-
-```bash
-  cd tradetix-backend/k8s
-  docker-compose up -d
-```
-
-run the app
-```bash
-    cd ..
-    npm run dev
-```
+- [Prod Swagger UI](tradetix.api.add2f90.kyma.ondemand.com/api-docs)
+- [Project Documentation](https://bitsapibp2024.github.io/TeamB10/)
