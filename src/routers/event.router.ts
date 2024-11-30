@@ -87,7 +87,7 @@ router.post("/", auth(), async (req: CustomRequest, res: Response) => {
     return res.status(201).send(createResponse("EVENT_CREATED", event));
   } catch (error: any) {
     return res
-      .status(500)
+      .status(error.status)
       .send(createErrorResponse("INTERNAL_SERVER_ERROR", error.message));
   }
 });
@@ -143,7 +143,7 @@ router.post(
       return res.status(201).send(createResponse("TICKET_CREATED", ticket));
     } catch (error: any) {
       return res
-        .status(500)
+        .status(error.status)
         .send(createErrorResponse("INTERNAL_SERVER_ERROR", error.message));
     }
   }
@@ -296,7 +296,7 @@ router.get("/", auth(), async (req: Request, res: Response) => {
     return res.status(200).send(createResponse("EVENTS_FETCHED", events));
   } catch (error: any) {
     return res
-      .status(500)
+      .status(error.status)
       .send(createErrorResponse("INTERNAL_SERVER_ERROR", error.message));
   }
 });
@@ -341,7 +341,7 @@ router.get("/:id", auth(), async (req: Request, res: Response) => {
     return res.status(200).send(createResponse("EVENT_FETCHED", event));
   } catch (error: any) {
     return res
-      .status(500)
+      .status(error.status)
       .send(createErrorResponse("INTERNAL_SERVER_ERROR", error.message));
   }
 });
@@ -405,7 +405,7 @@ router.put("/:id", auth(), async (req: CustomRequest, res: Response) => {
     return res.status(200).send(createResponse("EVENT_UPDATED", event));
   } catch (error: any) {
     return res
-      .status(500)
+      .status(error.status)
       .send(createErrorResponse("INTERNAL_SERVER_ERROR", error.message));
   }
 });
@@ -442,7 +442,7 @@ router.delete("/:id", auth(), async (req: CustomRequest, res: Response) => {
     return res.status(200).send(createResponse("EVENT_DELETED", event));
   } catch (error: any) {
     return res
-      .status(500)
+      .status(error.status)
       .send(createErrorResponse("INTERNAL_SERVER_ERROR", error.message));
   }
 });
