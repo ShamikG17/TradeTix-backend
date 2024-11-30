@@ -7,7 +7,7 @@ const swaggerOptions = {
     openapi: '3.0.0',
     info: {
       title: 'Trade-Tix',
-      version: '1.0.0',
+      version: '1.1.0',
       description: 'Trade-Tix API',
     },
     servers: [
