@@ -1,0 +1,102 @@
+config:
+  target: 'http://tradetix.api.add2f90.kyma.ondemand.com'
+  phases:
+    - duration: 300  # Increased duration to 5 minutes (300 seconds)
+      arrivalRate: 50  # Increased the rate to 50 requests per second (higher load)
+  defaults:
+    headers:
+      Content-Type: application/json
+  variables:
+    username: 'Shuchit'
+    password: 'shuchit'
+    bearerToken: ''  # Hardcoded bearer token
+
+scenarios:
+  - name: Load test with hardcoded bearer token
+    flow:
+      # Step 1: Create an event using the hardcoded token
+      - post:
+          url: '/api/v1/events'
+          headers:
+            Authorization: 'Bearer {{ bearerToken }}'
+          json:
+            name: 'Diljit India Tour'
+            date: '2025-01-31T00:00:00.000Z'
+            venue: 'Delhi'
+            performers:
+              - 'Yo Yo Honey Singh'
+              - 'Dua Lipa'
+              - 'Sabrina Carpenter'
+            categories:
+              - 'Music'
+              - 'Concert'
+            isAvailable: false
+            validFrom: '2025-01-01T00:00:00.000Z'
+            validTo: '2025-01-31T00:00:00.000Z'
+          expect:
+            - statusCode: 201  # Expect successful event creation
+
+      # Step 2: Send an empty request to /events
+      - post:
+          url: '/api/v1/events'
+          headers:
+            Authorization: 'Bearer {{ bearerToken }}'
+          json: {}
+          expect:
+            - statusCode: 400  # Expect bad request for empty data
+
+      # Step 3: Create a ticket for a specific event
+      - post:
+          url: '/api/v1/events/674a977d3207fba0f182e61d/tickets'
+          headers:
+            Authorization: 'Bearer {{ bearerToken }}'
+          json:
+            seatNumber: 'WEST F4'
+          expect:
+            - statusCode: 201  # Expect successful ticket creation
+
+      # Step 4: Perform a GET request to retrieve events
+      - get:
+          url: '/api/v1/events'
+          headers:
+            Authorization: 'Bearer {{ bearerToken }}'
+          expect:
+            - statusCode: 200  # Expect a successful response (200 OK)
+
+ensure:
+  # Response time assertions:
+  p99: 500  # Ensure 99% of response times are under 500ms
+
+  # Ensure error rate does not exceed 1%
+  maxErrorRate: 1  # Maximum error rate (1% or less)
+
+  # Ensure requests per second does not exceed 100
+  maxRequestsPerSecond: 100  # Optional: You can adjust this depending on your test scenario
+
+  # Ensure the success rate for the following codes is 100% (for successful responses)
+  http.successful_responses: 100  # Ensures successful status codes (200, 201)
+
+  # Ensure the failure rate (status code 500) does not exceed 1%
+  http.failed_responses:
+    - statusCode: 500
+    - max: 1  # Ensure no more than 1% of requests result in a 500 error
+
+  # Response time assertions:
+  # Ensures the minimum response time is within an acceptable range
+  http.response_time.min: 100  # Minimum response time in ms
+  # Ensures the maximum response time is within an acceptable range
+  http.response_time.max: 1000  # Maximum response time in ms
+  # Ensures the average response time is under a threshold
+  http.response_time.mean: 500  # Mean response time in ms
+
+  # Ensure requests per second is within expected range
+  http.request_rate:
+    - min: 40  # Minimum request rate (requests per second)
+    - max: 50  # Maximum request rate (requests per second)
+
+  # Ensure no more than 1% of requests result in client or server errors
+  http.errors_rate:
+    - statusCode: 4xx
+    - max: 1  # Limit 1% of 4xx client errors
+    - statusCode: 5xx
+    - max: 1  # Limit 1% of 5xx server errors
