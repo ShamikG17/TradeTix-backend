@@ -39,10 +39,13 @@ const router = express.Router();
  *             properties:
  *               username:
  *                 type: string
+ *                 example: johndoe
  *               password:
  *                 type: string
+ *                 example: strongPassword1!
  *               role:
  *                 type: string
+ *                 example: user
  *     responses:
  *       201:
  *         description: User registered successfully
@@ -107,6 +110,7 @@ router.get("/", auth(), async (req: CustomRequest, res: Response) => {
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
  *         description: User ID
@@ -143,6 +147,7 @@ router.get("/:id", auth(), async (req: CustomRequest, res: Response) => {
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
  *         description: User ID
@@ -189,6 +194,7 @@ router.put("/:id", auth(), async (req: CustomRequest, res: Response) => {
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
  *         description: User ID
@@ -228,8 +234,10 @@ router.delete("/:id", auth(), async (req: CustomRequest, res: Response) => {
  *             properties:
  *               username:
  *                 type: string
+ *                 example: janedoe
  *               password:
  *                 type: string
+ *                 example: weakPassword
  *     responses:
  *       200:
  *         description: User logged in successfully

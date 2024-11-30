@@ -313,6 +313,7 @@ router.get("/", auth(), async (req: Request, res: Response) => {
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
  *         description: Event ID
@@ -357,6 +358,7 @@ router.get("/:id", auth(), async (req: Request, res: Response) => {
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
  *         description: Event ID
@@ -420,6 +422,7 @@ router.put("/:id", auth(), async (req: CustomRequest, res: Response) => {
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
  *         description: Event ID
