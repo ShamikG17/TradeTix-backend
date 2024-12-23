@@ -17,7 +17,7 @@ export const createUser = async (user: Partial<IUser>) => {
   return { user: newUser, token };
 }
 
-export const loginUser = async (user: Partial<IUser>, role: 'user'|'admin' = 'user') => {
+export const loginUser = async (user: Partial<IUser>, role: 'USER'|'ADMIN' = 'USER') => {
   const { username, password } = user;
   if (!username || !password) {
     throw HttpError.badRequest("User", "Please provide all required fields");

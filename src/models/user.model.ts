@@ -14,7 +14,7 @@ export interface IUser extends Document{
 }
 
 export interface IUserMethods {
-    generateAuthToken(role: 'user'|'admin'): Promise<string>;
+    generateAuthToken(role: 'USER'|'ADMIN'): Promise<string>;
     toJSON(): IUser;
 }
 
@@ -63,7 +63,7 @@ userSchema.pre('save', async function(next) {
     }
 });
 
-userSchema.methods.generateAuthToken = async function(role: 'user' | 'admin' = 'user') {
+userSchema.methods.generateAuthToken = async function(role: 'USER' | 'ADMIN' = 'USER') {
     const user = this;
     const token = jwt.sign({ _id: (user._id as string).toString(), role}, process.env.JWT_SECRET!);
     user.tokens = user.tokens.concat({ token });
