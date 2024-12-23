@@ -176,8 +176,8 @@ router.post(
         .send(createResponse("LISTING_CREATED", newListing));
     } catch (error: any) {
       return res
-        .status(error.status)
-        .send(createErrorResponse(error.message, error.error));
+      .status(409)
+      .send(createErrorResponse("CONFLICT!. LISTINGS ALREADY EXISTS", error.errmsg));
     }
   }
 );
