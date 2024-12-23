@@ -156,6 +156,8 @@ router.delete("/:id", auth(), async (req: CustomRequest, res: Response) => {
  *         description: Invalid Request
  *       401:
  *         description: User Unauthorized
+ *       409:
+ *         description: Conflict!. Listings already exists
  *       500:
  *         description: Internal Server Error
  */
