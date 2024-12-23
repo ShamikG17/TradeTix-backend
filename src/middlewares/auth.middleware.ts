@@ -13,7 +13,7 @@ interface DecodedToken {
 }
 
 const auth =
-  (role: "user" | "admin" = "user") =>
+  (role: "USER" | "ADMIN" = "USER") =>
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
       const token = req.header("Authorization")?.replace("Bearer ", "");
@@ -34,7 +34,7 @@ const auth =
         throw HttpError.unauthorized("User", "Please authenticate");
       }
 
-      if (role === "admin" && user.role !== "admin") {
+      if (role === "ADMIN" && user.role !== "ADMIN") {
         throw HttpError.forbidden("User", "Access denied");
       }
 
