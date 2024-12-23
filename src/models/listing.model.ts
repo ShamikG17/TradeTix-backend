@@ -5,7 +5,7 @@ import { ITicket } from "./ticket.model";
 export interface IListing extends Document {
   ticketID: ITicket;
   price: number;
-  status: "open" | "closed";
+  status: "OPEN" | "CLOSED";
   createdBy: IUser;
   createdAt: Date;
   updatedBy: IUser;
@@ -32,8 +32,8 @@ const listingSchema = new Schema<IListing, ListingModel, IListingMethods>(
     },
     status: {
       type: String,
-      enum: ["open", "closed"],
-      default: "open",
+      enum: ["OPEN", "CLOSED"],
+      default: "OPEN",
     },
     createdBy: {
       type: Schema.Types.ObjectId,

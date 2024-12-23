@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 export interface IUser extends Document{
     username: string;
     password: string;
-    role: 'user' | 'admin';
+    role: 'USER' | 'ADMIN';
     tokens: { token: string}[];
     accountNumber: string
     IFSCCode: string
@@ -36,8 +36,8 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
     role: {
         type: String,
         required: true,
-        enum: ['user', 'admin'],
-        default: 'user'
+        enum: ['USER', 'ADMIN'],
+        default: 'USER'
     },
     tokens: [{
         token: {
