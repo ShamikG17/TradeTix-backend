@@ -60,11 +60,11 @@ export const buyTicketListing = async (id: string, user: Partial<IUser>) => {
   if (!listing) {
     throw HttpError.notFound("Listing", "Listing not found");
   }
-  if (listing.status === "closed") {
+  if (listing.status === "CLOSED") {
     throw HttpError.badRequest("Listing", "Listing is already closed");
   }
   const newTransaction = await createTransaction(listing, user);
-  listing.status = "closed";
+  listing.status = "CLOSED";
   await listing.save();
 
   await Ticket.findOneAndUpdate({ _id: listing.ticketID }, { ownerID: user });
