@@ -156,6 +156,8 @@ router.delete("/:id", auth(), async (req: CustomRequest, res: Response) => {
  *         description: Invalid Request
  *       401:
  *         description: User Unauthorized
+ *       409:
+ *         description: Conflict!. Listings already exists
  *       500:
  *         description: Internal Server Error
  */
@@ -176,8 +178,8 @@ router.post(
         .send(createResponse("LISTING_CREATED", newListing));
     } catch (error: any) {
       return res
-        .status(error.status)
-        .send(createErrorResponse(error.message, error.error));
+      .status(409)
+      .send(createErrorResponse("CONFLICT!. LISTINGS ALREADY EXISTS", error.errmsg));
     }
   }
 );
